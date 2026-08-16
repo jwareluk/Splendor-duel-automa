@@ -134,7 +134,7 @@
       background-color: #2b2b2b;
       padding: 8px 12px;
       display: flex;
-      justify-content: flex-end; /* Right-aligned */
+      justify-content: flex-end;
       align-items: center;
       gap: 6px;
       min-height: 40px;
@@ -252,9 +252,10 @@
       position: absolute;
       bottom: 8px;
       right: 12px;
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #4a3b2c;
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: #3b2507;
+      line-height: 1;
     }
 
     .controls {
@@ -335,6 +336,13 @@
   </div>
 
   <script>
+    const directionMap = {
+      'NW': '↰',
+      'NE': '↱',
+      'SW': '↲',
+      'SE': '↳'
+    };
+
     const automaMasterPool = [
       {
         id: 1,
@@ -634,7 +642,7 @@
 
     function renderCard(card) {
       document.getElementById('card-id-display').innerText = '#' + card.id;
-      document.getElementById('card-code').innerText = card.code;
+      document.getElementById('card-code').innerText = directionMap[card.code] || card.code;
 
       // Render Top Action Icons
       var topContainer = document.getElementById('top-icons');
@@ -662,7 +670,7 @@
         topContainer.appendChild(iconDiv);
       });
 
-      // Gem circles updated to simple colored circles
+      // Gem circles
       var banner = document.querySelector('.gem-priority-banner');
       var gemMap = {
         blue: '<div class="gem-circle gem-blue">🟦</div>',
@@ -680,7 +688,7 @@
       gemsHTML += '<div class="card-id-tag" id="card-number">' + card.id + '</div>';
       banner.innerHTML = gemsHTML;
 
-      // Action Rows renamed to Round 1 / Round 2 / Round 3
+      // Action Rows
       var actionContainer = document.getElementById('action-sections');
       actionContainer.innerHTML = 
         '<div class="action-row">' +
