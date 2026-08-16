@@ -134,7 +134,7 @@
       background-color: #2b2b2b;
       padding: 8px 12px;
       display: flex;
-      justify-content: flex-start;
+      justify-content: flex-end; /* Right-aligned */
       align-items: center;
       gap: 6px;
       min-height: 40px;
@@ -308,7 +308,7 @@
   <!-- Main Application Container -->
   <div id="app-container">
     <div class="status-bar">
-      <span class="round-badge">Round: <span id="current-round">1</span>/3</span>
+      <span class="round-badge">Round <span id="current-round">1</span></span>
       <span>Cards Left: <span id="deck-count">0</span></span>
       <span>Card: <span id="card-id-display">--</span></span>
     </div>
@@ -335,7 +335,6 @@
   </div>
 
   <script>
-    // Complete 18-Card Dataset from Spreadsheet
     const automaMasterPool = [
       {
         id: 1,
@@ -506,6 +505,7 @@
     let currentRound = 1;
     let selectedDeckSize = 10;
     let activeCard = null;
+    const MAX_ROUNDS = 6;
 
     window.addEventListener("DOMContentLoaded", function() {
       if (!autoResumeGame()) {
@@ -525,7 +525,6 @@
       document.getElementById('confirm-reset-btn').addEventListener('click', executeReset);
     });
 
-    // Save & Auto-Resume Logic
     function saveGameState() {
       const state = {
         activeCampaignDeck,
@@ -561,7 +560,7 @@
         }
 
         if (drawPile.length === 0) {
-          document.getElementById('draw-btn').innerText = currentRound < 3 ? `Start Round ${currentRound + 1}` : "Game Completed";
+          document.getElementById('draw-btn').innerText = currentRound < MAX_ROUNDS ? `Start Round ${currentRound + 1}` : "Game Completed";
         } else {
           document.getElementById('draw-btn').innerText = "Draw Card";
         }
@@ -604,13 +603,13 @@
       document.getElementById('top-icons').innerHTML = '';
       document.getElementById('action-sections').innerHTML = 
         '<div style="text-align:center; padding:40px 10px; color:#4a3b2c; font-weight:bold;">' +
-          'Round ' + currentRound + ' of 3 Ready!<br><br>Tap "Draw Card" to reveal card.' +
+          'Round ' + currentRound + ' Ready!<br><br>Tap "Draw Card" to reveal card.' +
         '</div>';
     }
 
     function drawCard() {
       if (drawPile.length === 0) {
-        if (currentRound < 3) {
+        if (currentRound < MAX_ROUNDS) {
           startRound(currentRound + 1);
         } else {
           showResetModal();
@@ -623,7 +622,7 @@
       document.getElementById('deck-count').innerText = drawPile.length;
 
       if (drawPile.length === 0) {
-        if (currentRound < 3) {
+        if (currentRound < MAX_ROUNDS) {
           document.getElementById('draw-btn').innerText = 'Start Round ' + (currentRound + 1);
         } else {
           document.getElementById('draw-btn').innerText = "Game Completed";
@@ -637,7 +636,7 @@
       document.getElementById('card-id-display').innerText = '#' + card.id;
       document.getElementById('card-code').innerText = card.code;
 
-      // Render Top Action Icons (Crown : [Privilege] [Steal] [VP] [Repeat])
+      // Render Top Action Icons
       var topContainer = document.getElementById('top-icons');
       topContainer.innerHTML = '';
 
@@ -663,14 +662,14 @@
         topContainer.appendChild(iconDiv);
       });
 
-      // Dynamic Gem Priority List Banner
+      // Gem circles updated to simple colored circles
       var banner = document.querySelector('.gem-priority-banner');
       var gemMap = {
-        blue: '<div class="gem-circle gem-blue">💎</div>',
-        black: '<div class="gem-circle gem-black">🖤</div>',
+        blue: '<div class="gem-circle gem-blue">🟦</div>',
+        black: '<div class="gem-circle gem-black">⬛</div>',
         white: '<div class="gem-circle gem-white">⚪</div>',
         green: '<div class="gem-circle gem-green">🟢</div>',
-        pearl: '<div class="gem-circle gem-pearl">🌸</div>',
+        pearl: '<div class="gem-circle gem-pearl">🩷</div>',
         red: '<div class="gem-circle gem-red">🔴</div>'
       };
 
@@ -681,19 +680,19 @@
       gemsHTML += '<div class="card-id-tag" id="card-number">' + card.id + '</div>';
       banner.innerHTML = gemsHTML;
 
-      // Render Action Tiers
+      // Action Rows renamed to Round 1 / Round 2 / Round 3
       var actionContainer = document.getElementById('action-sections');
       actionContainer.innerHTML = 
         '<div class="action-row">' +
-          '<div class="tier-label">Tier 1</div>' +
+          '<div class="tier-label">Round 1</div>' +
           '<div class="action-item-container">' + card.tier1 + '</div>' +
         '</div>' +
         '<div class="action-row">' +
-          '<div class="tier-label">Tier 2</div>' +
+          '<div class="tier-label">Round 2</div>' +
           '<div class="action-item-container">' + card.tier2 + '</div>' +
         '</div>' +
         '<div class="action-row">' +
-          '<div class="tier-label">Tier 3</div>' +
+          '<div class="tier-label">Round 3</div>' +
           '<div class="action-item-container">' + card.tier3 + '</div>' +
         '</div>';
     }
