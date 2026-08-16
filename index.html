@@ -252,10 +252,19 @@
       position: absolute;
       bottom: 8px;
       right: 12px;
-      font-size: 2.6rem;
-      font-weight: 900;
-      color: #3b2507;
-      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .arrow-icon {
+      width: 42px;
+      height: 42px;
+      stroke: #3b2507;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
     }
 
     .controls {
@@ -336,11 +345,12 @@
   </div>
 
   <script>
-    const directionMap = {
-      'NW': '↰',
-      'NE': '↱',
-      'SW': '↲',
-      'SE': '↳'
+    // Square 1:1 ratio SVG paths for 90-degree corner arrows
+    const directionSVGMap = {
+      'NW': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 20V8H4"/><polyline points="9 3 4 8 9 13"/></svg>`,
+      'NE': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 20V8h8"/><polyline points="15 3 20 8 15 13"/></svg>`,
+      'SW': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 4v12H4"/><polyline points="9 11 4 16 9 21"/></svg>`,
+      'SE': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 4v12h8"/><polyline points="15 11 20 16 15 21"/></svg>`
     };
 
     const automaMasterPool = [
@@ -607,7 +617,7 @@
     function renderRoundStartPrompt() {
       document.getElementById('card-id-display').innerText = '--';
       document.getElementById('card-number').innerText = '--';
-      document.getElementById('card-code').innerText = '--';
+      document.getElementById('card-code').innerHTML = '--';
       document.getElementById('top-icons').innerHTML = '';
       document.getElementById('action-sections').innerHTML = 
         '<div style="text-align:center; padding:40px 10px; color:#4a3b2c; font-weight:bold;">' +
@@ -642,7 +652,7 @@
 
     function renderCard(card) {
       document.getElementById('card-id-display').innerText = '#' + card.id;
-      document.getElementById('card-code').innerText = directionMap[card.code] || card.code;
+      document.getElementById('card-code').innerHTML = directionSVGMap[card.code] || card.code;
 
       // Render Top Action Icons
       var topContainer = document.getElementById('top-icons');
