@@ -134,10 +134,17 @@
       background-color: #2b2b2b;
       padding: 8px 12px;
       display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      min-height: 40px;
+      justify-content: flex-start;
       align-items: center;
+      gap: 6px;
+      min-height: 40px;
+    }
+
+    .crown-colon {
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-right: 4px;
     }
 
     .action-icon {
@@ -171,23 +178,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px 0;
+      padding: 12px 0;
       gap: 8px;
       position: relative;
       border-right: 2px solid #6b4d21;
-    }
-
-    .favor-banner-icon {
-      width: 44px;
-      height: 44px;
-      background: #eab308;
-      border: 2px solid #fff;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 6px;
     }
 
     .gem-circle {
@@ -325,13 +319,6 @@
 
       <div class="card-body">
         <div class="gem-priority-banner">
-          <div class="favor-banner-icon">👑</div>
-          <div class="gem-circle gem-blue">💎</div>
-          <div class="gem-circle gem-black">🖤</div>
-          <div class="gem-circle gem-white">⚪</div>
-          <div class="gem-circle gem-green">🟢</div>
-          <div class="gem-circle gem-pearl">🌸</div>
-          <div class="gem-circle gem-red">🔴</div>
           <div class="card-id-tag" id="card-number">--</div>
         </div>
 
@@ -348,15 +335,171 @@
   </div>
 
   <script>
-    // Placeholder dataset
-    const automaMasterPool = Array.from({ length: 18 }, (_, i) => ({
-      id: i + 1,
-      code: String.fromCharCode(65 + i),
-      topIcons: ["vp", "privilege"],
-      tier1: `🖐️ Card #${i + 1} Action`,
-      tier2: "🚫 Tier 2 Action",
-      tier3: "🖐️ Tier 3 Action"
-    }));
+    // Complete 18-Card Dataset from Spreadsheet
+    const automaMasterPool = [
+      {
+        id: 1,
+        code: "NW",
+        topIcons: ["vp", "take-gem", "privilege", "extra-turn"],
+        gemPriority: ["black", "green", "blue", "red", "white", "pearl"],
+        tier1: "Refills if <5, takes 1",
+        tier2: "Spends Privilege, buys C2 for 0",
+        tier3: "Buys A2 for 5"
+      },
+      {
+        id: 2,
+        code: "NE",
+        topIcons: ["privilege", "extra-turn", "vp", "take-gem"],
+        gemPriority: ["green", "black", "red", "white", "pearl", "blue"],
+        tier1: "Refills if <2, spends Privilege, takes 2",
+        tier2: "Buys C3 for 1",
+        tier3: "Reserves A3 OR buys A1 for 4"
+      },
+      {
+        id: 3,
+        code: "SW",
+        topIcons: ["privilege", "extra-turn", "vp", "take-gem"],
+        gemPriority: ["blue", "red", "white", "pearl", "black", "green"],
+        tier1: "Refills if <2, takes 1",
+        tier2: "Buys A1 for 6",
+        tier3: "Refills if <5, takes 3"
+      },
+      {
+        id: 4,
+        code: "SE",
+        topIcons: ["extra-turn", "vp", "take-gem", "privilege"],
+        gemPriority: ["red", "white", "pearl", "black", "green", "blue"],
+        tier1: "Refills if <2, takes 3",
+        tier2: "Buys B1 for 2",
+        tier3: "Buys Reserved for 4 OR buys A2 for 4"
+      },
+      {
+        id: 5,
+        code: "NW",
+        topIcons: ["vp", "extra-turn", "privilege", "take-gem"],
+        gemPriority: ["white", "pearl", "black", "green", "blue", "red"],
+        tier1: "Refills if <1, takes 2",
+        tier2: "Spends Privilege, buys B2 for 3",
+        tier3: "Reserves B4 OR buys A3 for 4"
+      },
+      {
+        id: 6,
+        code: "NE",
+        topIcons: ["take-gem", "vp", "extra-turn", "privilege"],
+        gemPriority: ["pearl", "black", "green", "blue", "red", "white"],
+        tier1: "Refills if <5, takes 3",
+        tier2: "Buys B3 for 4",
+        tier3: "Refills if <2, spends Privilege, takes 3"
+      },
+      {
+        id: 7,
+        code: "SW",
+        topIcons: ["privilege", "take-gem", "vp", "extra-turn"],
+        gemPriority: ["blue", "pearl", "black", "green", "red", "white"],
+        tier1: "Refills if <2, spends Privilege, takes 2",
+        tier2: "Reserves B4 OR buys B2 for 3",
+        tier3: "Reserves B3 OR buys B1 for 2"
+      },
+      {
+        id: 8,
+        code: "SE",
+        topIcons: ["extra-turn", "privilege", "take-gem", "vp"],
+        gemPriority: ["red", "black", "green", "blue", "white", "pearl"],
+        tier1: "Refills if <1, takes 2",
+        tier2: "Buys Reserved for 5 OR buys B3 for 3",
+        tier3: "Buys B1 for 2"
+      },
+      {
+        id: 9,
+        code: "NW",
+        topIcons: ["vp", "privilege", "take-gem", "extra-turn"],
+        gemPriority: ["white", "green", "blue", "red", "pearl", "black"],
+        tier1: "Refills if <1, takes 2",
+        tier2: "Buys Reserved for 4 OR buys B4 for 3",
+        tier3: "Spends Privilege, buys B2 for 2"
+      },
+      {
+        id: 10,
+        code: "NE",
+        topIcons: ["take-gem", "extra-turn", "privilege", "vp"],
+        gemPriority: ["pearl", "blue", "red", "white", "black", "green"],
+        tier1: "Refills if <5, spends Privilege, takes 2",
+        tier2: "Buys Reserved for 3 OR buys C4 for 2",
+        tier3: "Buys B3 for 3"
+      },
+      {
+        id: 11,
+        code: "SW",
+        topIcons: ["privilege", "vp", "extra-turn", "take-gem"],
+        gemPriority: ["black", "red", "white", "pearl", "green", "blue"],
+        tier1: "Reserves C1 OR refills if <2, takes 3",
+        tier2: "Refills if <1, takes 2",
+        tier3: "Spends Privilege, buys C4 for 1"
+      },
+      {
+        id: 12,
+        code: "SE",
+        topIcons: ["extra-turn", "take-gem", "vp", "privilege"],
+        gemPriority: ["green", "white", "pearl", "black", "blue", "red"],
+        tier1: "Reserves B1 OR refills if <2, takes 2",
+        tier2: "Refills if <2, takes 2",
+        tier3: "Spends Privilege, buys C5 for 1"
+      },
+      {
+        id: 13,
+        code: "NW",
+        topIcons: ["vp", "privilege", "extra-turn", "take-gem"],
+        gemPriority: ["pearl", "red", "green", "white", "blue", "black"],
+        tier1: "Buys B2 for 4",
+        tier2: "Refills if <3, spends Privilege, takes 2",
+        tier3: "Buys Reserved for 3 OR refills if <1, takes 2"
+      },
+      {
+        id: 14,
+        code: "NE",
+        topIcons: ["take-gem", "extra-turn", "vp", "privilege"],
+        gemPriority: ["black", "white", "blue", "pearl", "red", "green"],
+        tier1: "Buys C2 for 2",
+        tier2: "Refills if <5, takes 2",
+        tier3: "Refills if <3, spends Privilege, takes 3"
+      },
+      {
+        id: 15,
+        code: "SW",
+        topIcons: ["privilege", "vp", "take-gem", "extra-turn"],
+        gemPriority: ["green", "pearl", "red", "black", "white", "blue"],
+        tier1: "Buys C3 for 2",
+        tier2: "Refills if <4, takes 3",
+        tier3: "Buys Reserved for 3 OR refills if <2, takes 2"
+      },
+      {
+        id: 16,
+        code: "SE",
+        topIcons: ["extra-turn", "take-gem", "privilege", "vp"],
+        gemPriority: ["blue", "black", "white", "green", "pearl", "red"],
+        tier1: "Buys C4 for 3",
+        tier2: "Refills if <5, takes 3",
+        tier3: "Refills if <2, takes 2"
+      },
+      {
+        id: 17,
+        code: "NW",
+        topIcons: ["vp", "privilege", "extra-turn", "take-gem"],
+        gemPriority: ["red", "green", "pearl", "blue", "black", "white"],
+        tier1: "Buys C5 for 3",
+        tier2: "Refills if <5, takes 2",
+        tier3: "Refills if <1, takes 2"
+      },
+      {
+        id: 18,
+        code: "SE",
+        topIcons: ["take-gem", "extra-turn", "privilege", "vp"],
+        gemPriority: ["white", "blue", "black", "red", "green", "pearl"],
+        tier1: "Spends Privilege, buys C1 for 3",
+        tier2: "Refills if <5, takes 3",
+        tier3: "Spends Privilege, buys B4 for 2"
+      }
+    ];
 
     let activeCampaignDeck = [];
     let drawPile = [];
@@ -492,23 +635,53 @@
 
     function renderCard(card) {
       document.getElementById('card-id-display').innerText = '#' + card.id;
-      document.getElementById('card-number').innerText = card.id;
       document.getElementById('card-code').innerText = card.code;
 
+      // Render Top Action Icons (Crown : [Privilege] [Steal] [VP] [Repeat])
       var topContainer = document.getElementById('top-icons');
       topContainer.innerHTML = '';
+
+      var crownDiv = document.createElement('div');
+      crownDiv.className = 'action-icon crown';
+      crownDiv.innerText = '👑';
+      topContainer.appendChild(crownDiv);
+
+      var colonSpan = document.createElement('span');
+      colonSpan.className = 'crown-colon';
+      colonSpan.innerText = ':';
+      topContainer.appendChild(colonSpan);
+
       card.topIcons.forEach(function(iconType) {
+        if (iconType === 'crown') return;
         var iconDiv = document.createElement('div');
         iconDiv.className = 'action-icon ' + iconType;
         if (iconType === 'extra-turn') iconDiv.innerText = '🔄';
-        else if (iconType === 'take-gem') iconDiv.innerText = '🖐️';
+        else if (iconType === 'take-gem') iconDiv.innerText = '🤏';
         else if (iconType === 'privilege') iconDiv.innerText = '📜';
         else if (iconType === 'vp') iconDiv.innerText = 'VP';
         else if (iconType === 'royal-favor') { iconDiv.innerText = 'Favor'; iconDiv.className += ' royal-favor'; }
-        else iconDiv.innerText = '👑';
         topContainer.appendChild(iconDiv);
       });
 
+      // Dynamic Gem Priority List Banner
+      var banner = document.querySelector('.gem-priority-banner');
+      var gemMap = {
+        blue: '<div class="gem-circle gem-blue">💎</div>',
+        black: '<div class="gem-circle gem-black">🖤</div>',
+        white: '<div class="gem-circle gem-white">⚪</div>',
+        green: '<div class="gem-circle gem-green">🟢</div>',
+        pearl: '<div class="gem-circle gem-pearl">🌸</div>',
+        red: '<div class="gem-circle gem-red">🔴</div>'
+      };
+
+      var gemsHTML = '';
+      card.gemPriority.forEach(function(gemKey) {
+        gemsHTML += gemMap[gemKey];
+      });
+      gemsHTML += '<div class="card-id-tag" id="card-number">' + card.id + '</div>';
+      banner.innerHTML = gemsHTML;
+
+      // Render Action Tiers
       var actionContainer = document.getElementById('action-sections');
       actionContainer.innerHTML = 
         '<div class="action-row">' +
