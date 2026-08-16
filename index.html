@@ -363,10 +363,8 @@
     let currentRound = 1;
     let selectedDeckSize = 10;
     let activeCard = null;
-    let wakeLock = null;
 
     window.addEventListener("DOMContentLoaded", function() {
-      // Direct auto-resume on load if save data exists
       if (!autoResumeGame()) {
         document.getElementById('difficulty-screen').style.display = 'flex';
       }
@@ -382,30 +380,7 @@
       document.getElementById('reset-btn').addEventListener('click', showResetModal);
       document.getElementById('cancel-reset-btn').addEventListener('click', hideResetModal);
       document.getElementById('confirm-reset-btn').addEventListener('click', executeReset);
-
-      document.addEventListener("visibilitychange", function() {
-        if (wakeLock !== null && document.visibilityState === 'visible') {
-          requestWakeLock();
-        }
-      });
     });
-
-    // Screen Wake Lock
-    async function requestWakeLock() {
-      if ('wakeLock' in navigator) {
-        try {
-          wakeLock = await navigator.wakeLock.request('screen');
-        } catch (err) {
-          console.log("Wake Lock request failed:", err.message);
-        }
-      }
-    }
-
-    function releaseWakeLock() {
-      if (wakeLock !== null) {
-        wakeLock.release().then(() => { wakeLock = null; });
-      }
-    }
 
     // Save & Auto-Resume Logic
     function saveGameState() {
@@ -448,7 +423,6 @@
           document.getElementById('draw-btn').innerText = "Draw Card";
         }
 
-        requestWakeLock();
         return true;
       } catch(e) {
         return false;
@@ -465,7 +439,6 @@
       activeCard = null;
       
       startRound(1);
-      requestWakeLock();
     }
 
     function startRound(roundNum) {
@@ -568,7 +541,6 @@
       localStorage.removeItem('splendor_automa_save');
       
       hideResetModal();
-      releaseWakeLock();
       document.getElementById('app-container').style.display = 'none';
       document.getElementById('difficulty-screen').style.display = 'flex';
     }
