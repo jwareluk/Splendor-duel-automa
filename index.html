@@ -215,8 +215,8 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 12px;
-      gap: 12px;
+      padding: 8px 12px 12px 12px;
+      gap: 8px;
     }
 
     .action-row {
@@ -224,8 +224,9 @@
       border-bottom: 2px solid #b89f80;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 6px 0;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 2px 0 6px 0;
     }
 
     .action-row:last-child {
@@ -237,15 +238,19 @@
       font-weight: 800;
       color: #785a36;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      text-align: center;
+      margin-bottom: 6px;
+      width: 100%;
     }
 
     .action-item-container {
       display: flex;
       align-items: center;
-      justify-content: space-around;
-      font-size: 1.1rem;
+      justify-content: center;
+      text-align: center;
+      font-size: 1.05rem;
       font-weight: bold;
+      flex: 1;
     }
 
     .card-footer-code {
@@ -261,7 +266,7 @@
       width: 42px;
       height: 42px;
       stroke: #3b2507;
-      stroke-width: 3.5;
+      stroke-width: 2; /* Thinner arrow line */
       stroke-linecap: round;
       stroke-linejoin: round;
       fill: none;
@@ -345,7 +350,7 @@
   </div>
 
   <script>
-    // Square 1:1 ratio SVG paths for 90-degree corner arrows
+    // Square 1:1 ratio SVG paths for 90-degree corner arrows (thinner line width)
     const directionSVGMap = {
       'NW': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 20V8H4"/><polyline points="9 3 4 8 9 13"/></svg>`,
       'NE': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 20V8h8"/><polyline points="15 3 20 8 15 13"/></svg>`,
@@ -680,14 +685,14 @@
         topContainer.appendChild(iconDiv);
       });
 
-      // Gem circles
+      // Gem circles with updated shapes (Circles for Blue/Black, Pink Flower for Pearl)
       var banner = document.querySelector('.gem-priority-banner');
       var gemMap = {
-        blue: '<div class="gem-circle gem-blue">🟦</div>',
-        black: '<div class="gem-circle gem-black">⬛</div>',
+        blue: '<div class="gem-circle gem-blue">🔵</div>',
+        black: '<div class="gem-circle gem-black">⚫</div>',
         white: '<div class="gem-circle gem-white">⚪</div>',
         green: '<div class="gem-circle gem-green">🟢</div>',
-        pearl: '<div class="gem-circle gem-pearl">🩷</div>',
+        pearl: '<div class="gem-circle gem-pearl">🌸</div>',
         red: '<div class="gem-circle gem-red">🔴</div>'
       };
 
@@ -698,7 +703,7 @@
       gemsHTML += '<div class="card-id-tag" id="card-number">' + card.id + '</div>';
       banner.innerHTML = gemsHTML;
 
-      // Action Rows
+      // Action Rows with centered labels and "Round 3-6" label
       var actionContainer = document.getElementById('action-sections');
       actionContainer.innerHTML = 
         '<div class="action-row">' +
@@ -710,7 +715,7 @@
           '<div class="action-item-container">' + card.tier2 + '</div>' +
         '</div>' +
         '<div class="action-row">' +
-          '<div class="tier-label">Round 3</div>' +
+          '<div class="tier-label">Round 3-6</div>' +
           '<div class="action-item-container">' + card.tier3 + '</div>' +
         '</div>';
     }
