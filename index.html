@@ -106,11 +106,18 @@
     .status-bar {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       background-color: #2d2d2d;
       padding: 12px 16px;
       border-radius: 8px;
       font-weight: bold;
       color: #f3f4f6;
+    }
+
+    .status-title {
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
     }
 
     .round-badge {
@@ -178,10 +185,22 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px 0;
+      padding: 8px 0;
       gap: 8px;
       position: relative;
       border-right: 2px solid #6b4d21;
+    }
+
+    .arrow-header-container {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #2b2b2b;
+      border-radius: 8px;
+      border: 1px solid #553e1a;
+      margin-bottom: 4px;
     }
 
     .gem-circle {
@@ -253,20 +272,11 @@
       flex: 1;
     }
 
-    .card-footer-code {
-      position: absolute;
-      bottom: 8px;
-      right: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     .arrow-icon {
-      width: 42px;
-      height: 42px;
-      stroke: #3b2507;
-      stroke-width: 2; /* Thinner arrow line */
+      width: 38px;
+      height: 38px;
+      stroke: #fbbf24; /* Bright amber gold for contrast on dark banner header */
+      stroke-width: 2.2;
       stroke-linecap: round;
       stroke-linejoin: round;
       fill: none;
@@ -324,8 +334,8 @@
   <div id="app-container">
     <div class="status-bar">
       <span class="round-badge">Round <span id="current-round">1</span></span>
+      <span class="status-title">Splendor Duel Automa</span>
       <span>Cards Left: <span id="deck-count">0</span></span>
-      <span>Card: <span id="card-id-display">--</span></span>
     </div>
 
     <!-- Automa Card Layout -->
@@ -333,14 +343,13 @@
       <div class="top-actions-bar" id="top-icons"></div>
 
       <div class="card-body">
-        <div class="gem-priority-banner">
+        <div class="gem-priority-banner" id="gem-banner">
+          <div class="arrow-header-container" id="arrow-header">--</div>
           <div class="card-id-tag" id="card-number">--</div>
         </div>
 
         <div class="action-sections" id="action-sections"></div>
       </div>
-
-      <div class="card-footer-code" id="card-code">--</div>
     </div>
 
     <div class="controls">
@@ -350,12 +359,12 @@
   </div>
 
   <script>
-    // Square 1:1 ratio SVG paths for 90-degree corner arrows (thinner line width)
+    // SVG arrows pointing FROM direction (Wind direction logic) with high-contrast amber gold stroke
     const directionSVGMap = {
-      'NW': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 20V8H4"/><polyline points="9 3 4 8 9 13"/></svg>`,
-      'NE': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 20V8h8"/><polyline points="15 3 20 8 15 13"/></svg>`,
-      'SW': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 4v12H4"/><polyline points="9 11 4 16 9 21"/></svg>`,
-      'SE': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M12 4v12h8"/><polyline points="15 11 20 16 15 21"/></svg>`
+      'NW': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 4v10h12"/><polyline points="13 9 18 14 13 19"/></svg>`,
+      'NE': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M18 4v10H6"/><polyline points="11 9 6 14 11 19"/></svg>`,
+      'SW': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M6 20V10h12"/><polyline points="13 5 18 10 13 15"/></svg>`,
+      'SE': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M18 20V10H6"/><polyline points="11 5 6 10 11 15"/></svg>`
     };
 
     const automaMasterPool = [
@@ -620,9 +629,9 @@
     }
 
     function renderRoundStartPrompt() {
-      document.getElementById('card-id-display').innerText = '--';
-      document.getElementById('card-number').innerText = '--';
-      document.getElementById('card-code').innerHTML = '--';
+      document.getElementById('gem-banner').innerHTML = 
+        '<div class="arrow-header-container">--</div>' +
+        '<div class="card-id-tag" id="card-number">--</div>';
       document.getElementById('top-icons').innerHTML = '';
       document.getElementById('action-sections').innerHTML = 
         '<div style="text-align:center; padding:40px 10px; color:#4a3b2c; font-weight:bold;">' +
@@ -656,10 +665,7 @@
     }
 
     function renderCard(card) {
-      document.getElementById('card-id-display').innerText = '#' + card.id;
-      document.getElementById('card-code').innerHTML = directionSVGMap[card.code] || card.code;
-
-      // Render Top Action Icons
+      // Top Action Icons
       var topContainer = document.getElementById('top-icons');
       topContainer.innerHTML = '';
 
@@ -685,8 +691,8 @@
         topContainer.appendChild(iconDiv);
       });
 
-      // Gem circles with updated shapes (Circles for Blue/Black, Pink Flower for Pearl)
-      var banner = document.querySelector('.gem-priority-banner');
+      // Gem circles & Arrow Header placement in top-left stripe
+      var banner = document.getElementById('gem-banner');
       var gemMap = {
         blue: '<div class="gem-circle gem-blue">🔵</div>',
         black: '<div class="gem-circle gem-black">⚫</div>',
@@ -696,14 +702,16 @@
         red: '<div class="gem-circle gem-red">🔴</div>'
       };
 
-      var gemsHTML = '';
+      var arrowHTML = directionSVGMap[card.code] || card.code;
+      var gemsHTML = '<div class="arrow-header-container">' + arrowHTML + '</div>';
+
       card.gemPriority.forEach(function(gemKey) {
         gemsHTML += gemMap[gemKey];
       });
-      gemsHTML += '<div class="card-id-tag" id="card-number">' + card.id + '</div>';
+      gemsHTML += '<div class="card-id-tag" id="card-number">#' + card.id + '</div>';
       banner.innerHTML = gemsHTML;
 
-      // Action Rows with centered labels and "Round 3-6" label
+      // Action Rows
       var actionContainer = document.getElementById('action-sections');
       actionContainer.innerHTML = 
         '<div class="action-row">' +
