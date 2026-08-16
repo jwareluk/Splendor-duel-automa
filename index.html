@@ -139,12 +139,26 @@
 
     .top-actions-bar {
       background-color: #2b2b2b;
-      padding: 8px 12px;
+      padding: 6px 12px;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 44px;
+      border-bottom: 2px solid #553e1a;
+    }
+
+    .arrow-top-container {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .top-right-icons {
+      display: flex;
       align-items: center;
       gap: 6px;
-      min-height: 40px;
     }
 
     .crown-colon {
@@ -185,22 +199,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 8px 0;
+      padding: 12px 0 8px 0;
       gap: 8px;
       position: relative;
       border-right: 2px solid #6b4d21;
-    }
-
-    .arrow-header-container {
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #2b2b2b;
-      border-radius: 8px;
-      border: 1px solid #553e1a;
-      margin-bottom: 4px;
     }
 
     .gem-circle {
@@ -273,10 +275,10 @@
     }
 
     .arrow-icon {
-      width: 38px;
-      height: 38px;
-      stroke: #fbbf24; /* Bright amber gold for contrast on dark banner header */
-      stroke-width: 2.2;
+      width: 34px;
+      height: 34px;
+      stroke: #fbbf24; /* Bright amber gold for high contrast on black stripe */
+      stroke-width: 2.4;
       stroke-linecap: round;
       stroke-linejoin: round;
       fill: none;
@@ -340,11 +342,13 @@
 
     <!-- Automa Card Layout -->
     <div class="automa-card" id="card-display">
-      <div class="top-actions-bar" id="top-icons"></div>
+      <div class="top-actions-bar">
+        <div class="arrow-top-container" id="arrow-header">--</div>
+        <div class="top-right-icons" id="top-icons"></div>
+      </div>
 
       <div class="card-body">
         <div class="gem-priority-banner" id="gem-banner">
-          <div class="arrow-header-container" id="arrow-header">--</div>
           <div class="card-id-tag" id="card-number">--</div>
         </div>
 
@@ -629,10 +633,9 @@
     }
 
     function renderRoundStartPrompt() {
-      document.getElementById('gem-banner').innerHTML = 
-        '<div class="arrow-header-container">--</div>' +
-        '<div class="card-id-tag" id="card-number">--</div>';
+      document.getElementById('arrow-header').innerHTML = '--';
       document.getElementById('top-icons').innerHTML = '';
+      document.getElementById('gem-banner').innerHTML = '<div class="card-id-tag" id="card-number">--</div>';
       document.getElementById('action-sections').innerHTML = 
         '<div style="text-align:center; padding:40px 10px; color:#4a3b2c; font-weight:bold;">' +
           'Round ' + currentRound + ' Ready!<br><br>Tap "Draw Card" to reveal card.' +
@@ -665,7 +668,10 @@
     }
 
     function renderCard(card) {
-      // Top Action Icons
+      // Arrow Header on the top-left of the black stripe
+      document.getElementById('arrow-header').innerHTML = directionSVGMap[card.code] || card.code;
+
+      // Top Action Icons (Right side of the top black stripe)
       var topContainer = document.getElementById('top-icons');
       topContainer.innerHTML = '';
 
@@ -691,7 +697,7 @@
         topContainer.appendChild(iconDiv);
       });
 
-      // Gem circles & Arrow Header placement in top-left stripe
+      // Gem circles priority banner (brown vertical column)
       var banner = document.getElementById('gem-banner');
       var gemMap = {
         blue: '<div class="gem-circle gem-blue">🔵</div>',
@@ -702,9 +708,7 @@
         red: '<div class="gem-circle gem-red">🔴</div>'
       };
 
-      var arrowHTML = directionSVGMap[card.code] || card.code;
-      var gemsHTML = '<div class="arrow-header-container">' + arrowHTML + '</div>';
-
+      var gemsHTML = '';
       card.gemPriority.forEach(function(gemKey) {
         gemsHTML += gemMap[gemKey];
       });
