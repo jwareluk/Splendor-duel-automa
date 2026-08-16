@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Splendor Duel Solo Automa Companion</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #eaddca;
+      --card-border: #8b6b43;
+      --text-color: #1a1a1a;
+      --accent-color: #3b82f6;
+      --banner-bg: #966f33;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: #f3f4f6;
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #difficulty-screen, #confirm-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(18, 18, 18, 0.98);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    #confirm-modal {
+      display: none;
+      z-index: 200;
+      background-color: rgba(0, 0, 0, 0.85);
+    }
+
+    .modal-box {
+      background-color: #2d2d2d;
+      padding: 24px;
+      border-radius: 16px;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .modal-box h3 {
+      margin-top: 0;
+      color: #fff;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    #difficulty-screen h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .diff-btn {
+      width: 100%;
+      max-width: 320px;
+      padding: 16px 20px;
+      margin: 8px 0;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      background-color: var(--accent-color);
+      color: white;
+      cursor: pointer;
+    }
+
+    #app-container {
+      width: 100%;
+      max-width: 420px;
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      background-color: #2d2d2d;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #f3f4f6;
+    }
+
+    .round-badge {
+      color: #f59e0b;
+    }
+
+    .automa-card {
+      background-color: var(--card-bg);
+      border: 3px solid var(--card-border);
+      border-radius: 16px;
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      min-height: 460px;
+      position: relative;
+    }
+
+    .top-actions-bar {
+      background-color: #2b2b2b;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      min-height: 40px;
+      align-items: center;
+    }
+
+    .action-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: bold;
+      border: 2px solid #ddd;
+    }
+
+    .action-icon.crown { background: #d97706; font-size: 1.2rem; }
+    .action-icon.extra-turn { background: #2563eb; }
+    .action-icon.take-gem { background: #059669; }
+    .action-icon.privilege { background: #7c3aed; }
+    .action-icon.vp { background: #5b21b6; }
+    .action-icon.royal-favor { background: #d97706; padding: 2px 6px; border-radius: 20px; font-size: 0.8rem;}
+
+    .card-body {
+      display: flex;
+      flex: 1;
+    }
+
+    .gem-priority-banner {
+      width: 70px;
+      background-color: var(--banner-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0;
+      gap: 8px;
+      position: relative;
+      border-right: 2px solid #6b4d21;
+    }
+
+    .favor-banner-icon {
+      width: 44px;
+      height: 44px;
+      background: #eab308;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .gem-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .gem-blue { background-color: #0284c7; }
+    .gem-black { background-color: #1f2937; }
+    .gem-white { background-color: #f8fafc; border-color: #94a3b8; }
+    .gem-green { background-color: #16a34a; }
+    .gem-pearl { background-color: #f472b6; }
+    .gem-red { background-color: #dc2626; }
+
+    .card-id-tag {
+      margin-top: auto;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #3b2507;
+      padding-bottom: 6px;
+    }
+
+    .action-sections {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      gap: 12px;
+    }
+
+    .action-row {
+      flex: 1;
+      border-bottom: 2px solid #b89f80;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6px 0;
+    }
+
+    .action-row:last-child {
+      border-bottom: none;
+    }
+
+    .tier-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #785a36;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .action-item-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .card-footer-code {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #4a3b2c;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--accent-color);
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background-color: #4b5563;
+    }
+
+    .btn-danger {
+      background-color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Difficulty Selection Overlay -->
+  <div id="difficulty-screen">
+    <h2>Splendor Automa</h2>
+    <button class="diff-btn" data-size="10">Easy (10 Deck Size)</button>
+    <button class="diff-btn" data-size="9">Normal (9 Deck Size)</button>
+    <button class="diff-btn" data-size="8">Hard (8 Deck Size)</button>
+  </div>
+
+  <!-- In-App Confirmation Modal -->
+  <div id="confirm-modal">
+    <div class="modal-box">
+      <h3>Start New Game?</h3>
+      <p>This will discard your current progress and start fresh.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancel-reset-btn">Cancel</button>
+        <button class="btn btn-danger" id="confirm-reset-btn">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Container -->
+  <div id="app-container">
+    <div class="status-bar">
+      <span class="round-badge">Round: <span id="current-round">1</span>/3</span>
+      <span>Cards Left: <span id="deck-count">0</span></span>
+      <span>Card: <span id="card-id-display">--</span></span>
+    </div>
+
+    <!-- Automa Card Layout -->
+    <div class="automa-card" id="card-display">
+      <div class="top-actions-bar" id="top-icons"></div>
+
+      <div class="card-body">
+        <div class="gem-priority-banner">
+          <div class="favor-banner-icon">👑</div>
+          <div class="gem-circle gem-blue">💎</div>
+          <div class="gem-circle gem-black">🖤</div>
+          <div class="gem-circle gem-white">⚪</div>
+          <div class="gem-circle gem-green">🟢</div>
+          <div class="gem-circle gem-pearl">🌸</div>
+          <div class="gem-circle gem-red">🔴</div>
+          <div class="card-id-tag" id="card-number">--</div>
+        </div>
+
+        <div class="action-sections" id="action-sections"></div>
+      </div>
+
+      <div class="card-footer-code" id="card-code">--</div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="draw-btn">Draw Card</button>
+      <button class="btn btn-secondary" id="reset-btn">New Game</button>
+    </div>
+  </div>
+
+  <script>
+    // Placeholder dataset
+    const automaMasterPool = Array.from({ length: 18 }, (_, i) => ({
+      id: i + 1,
+      code: String.fromCharCode(65 + i),
+      topIcons: ["vp", "privilege"],
+      tier1: `🖐️ Card #${i + 1} Action`,
+      tier2: "🚫 Tier 2 Action",
+      tier3: "🖐️ Tier 3 Action"
+    }));
+
+    let activeCampaignDeck = [];
+    let drawPile = [];
+    let currentRound = 1;
+    let selectedDeckSize = 10;
+    let activeCard = null;
+    let wakeLock = null;
+
+    window.addEventListener("DOMContentLoaded", function() {
+      // Direct auto-resume on load if save data exists
+      if (!autoResumeGame()) {
+        document.getElementById('difficulty-screen').style.display = 'flex';
+      }
+
+      document.querySelectorAll('.diff-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var size = parseInt(this.getAttribute('data-size'), 10);
+          startGame(size);
+        });
+      });
+
+      document.getElementById('draw-btn').addEventListener('click', drawCard);
+      document.getElementById('reset-btn').addEventListener('click', showResetModal);
+      document.getElementById('cancel-reset-btn').addEventListener('click', hideResetModal);
+      document.getElementById('confirm-reset-btn').addEventListener('click', executeReset);
+
+      document.addEventListener("visibilitychange", function() {
+        if (wakeLock !== null && document.visibilityState === 'visible') {
+          requestWakeLock();
+        }
+      });
+    });
+
+    // Screen Wake Lock
+    async function requestWakeLock() {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+        } catch (err) {
+          console.log("Wake Lock request failed:", err.message);
+        }
+      }
+    }
+
+    function releaseWakeLock() {
+      if (wakeLock !== null) {
+        wakeLock.release().then(() => { wakeLock = null; });
+      }
+    }
+
+    // Save & Auto-Resume Logic
+    function saveGameState() {
+      const state = {
+        activeCampaignDeck,
+        drawPile,
+        currentRound,
+        selectedDeckSize,
+        activeCard
+      };
+      localStorage.setItem('splendor_automa_save', JSON.stringify(state));
+    }
+
+    function autoResumeGame() {
+      const saved = localStorage.getItem('splendor_automa_save');
+      if (!saved) return false;
+
+      try {
+        const state = JSON.parse(saved);
+        activeCampaignDeck = state.activeCampaignDeck;
+        drawPile = state.drawPile;
+        currentRound = state.currentRound;
+        selectedDeckSize = state.selectedDeckSize;
+        activeCard = state.activeCard;
+
+        document.getElementById('difficulty-screen').style.display = 'none';
+        document.getElementById('app-container').style.display = 'flex';
+        document.getElementById('current-round').innerText = currentRound;
+        document.getElementById('deck-count').innerText = drawPile.length;
+
+        if (activeCard) {
+          renderCard(activeCard);
+        } else {
+          renderRoundStartPrompt();
+        }
+
+        if (drawPile.length === 0) {
+          document.getElementById('draw-btn').innerText = currentRound < 3 ? `Start Round ${currentRound + 1}` : "Game Completed";
+        } else {
+          document.getElementById('draw-btn').innerText = "Draw Card";
+        }
+
+        requestWakeLock();
+        return true;
+      } catch(e) {
+        return false;
+      }
+    }
+
+    function startGame(size) {
+      selectedDeckSize = size;
+      document.getElementById('difficulty-screen').style.display = 'none';
+      document.getElementById('app-container').style.display = 'flex';
+      
+      var shuffled = [...automaMasterPool].sort(function() { return Math.random() - 0.5; });
+      activeCampaignDeck = shuffled.slice(0, selectedDeckSize);
+      activeCard = null;
+      
+      startRound(1);
+      requestWakeLock();
+    }
+
+    function startRound(roundNum) {
+      currentRound = roundNum;
+      activeCard = null;
+      document.getElementById('current-round').innerText = currentRound;
+      
+      drawPile = [...activeCampaignDeck].sort(function() { return Math.random() - 0.5; });
+      document.getElementById('deck-count').innerText = drawPile.length;
+      document.getElementById('draw-btn').innerText = "Draw Card";
+      
+      renderRoundStartPrompt();
+      saveGameState();
+    }
+
+    function renderRoundStartPrompt() {
+      document.getElementById('card-id-display').innerText = '--';
+      document.getElementById('card-number').innerText = '--';
+      document.getElementById('card-code').innerText = '--';
+      document.getElementById('top-icons').innerHTML = '';
+      document.getElementById('action-sections').innerHTML = 
+        '<div style="text-align:center; padding:40px 10px; color:#4a3b2c; font-weight:bold;">' +
+          'Round ' + currentRound + ' of 3 Ready!<br><br>Tap "Draw Card" to reveal card.' +
+        '</div>';
+    }
+
+    function drawCard() {
+      if (drawPile.length === 0) {
+        if (currentRound < 3) {
+          startRound(currentRound + 1);
+        } else {
+          showResetModal();
+        }
+        return;
+      }
+
+      activeCard = drawPile.pop();
+      renderCard(activeCard);
+      document.getElementById('deck-count').innerText = drawPile.length;
+
+      if (drawPile.length === 0) {
+        if (currentRound < 3) {
+          document.getElementById('draw-btn').innerText = 'Start Round ' + (currentRound + 1);
+        } else {
+          document.getElementById('draw-btn').innerText = "Game Completed";
+        }
+      }
+
+      saveGameState();
+    }
+
+    function renderCard(card) {
+      document.getElementById('card-id-display').innerText = '#' + card.id;
+      document.getElementById('card-number').innerText = card.id;
+      document.getElementById('card-code').innerText = card.code;
+
+      var topContainer = document.getElementById('top-icons');
+      topContainer.innerHTML = '';
+      card.topIcons.forEach(function(iconType) {
+        var iconDiv = document.createElement('div');
+        iconDiv.className = 'action-icon ' + iconType;
+        if (iconType === 'extra-turn') iconDiv.innerText = '🔄';
+        else if (iconType === 'take-gem') iconDiv.innerText = '🖐️';
+        else if (iconType === 'privilege') iconDiv.innerText = '📜';
+        else if (iconType === 'vp') iconDiv.innerText = 'VP';
+        else if (iconType === 'royal-favor') { iconDiv.innerText = 'Favor'; iconDiv.className += ' royal-favor'; }
+        else iconDiv.innerText = '👑';
+        topContainer.appendChild(iconDiv);
+      });
+
+      var actionContainer = document.getElementById('action-sections');
+      actionContainer.innerHTML = 
+        '<div class="action-row">' +
+          '<div class="tier-label">Tier 1</div>' +
+          '<div class="action-item-container">' + card.tier1 + '</div>' +
+        '</div>' +
+        '<div class="action-row">' +
+          '<div class="tier-label">Tier 2</div>' +
+          '<div class="action-item-container">' + card.tier2 + '</div>' +
+        '</div>' +
+        '<div class="action-row">' +
+          '<div class="tier-label">Tier 3</div>' +
+          '<div class="action-item-container">' + card.tier3 + '</div>' +
+        '</div>';
+    }
+
+    function showResetModal() {
+      document.getElementById('confirm-modal').style.display = 'flex';
+    }
+
+    function hideResetModal() {
+      document.getElementById('confirm-modal').style.display = 'none';
+    }
+
+    function executeReset() {
+      activeCampaignDeck = [];
+      drawPile = [];
+      currentRound = 1;
+      activeCard = null;
+      localStorage.removeItem('splendor_automa_save');
+      
+      hideResetModal();
+      releaseWakeLock();
+      document.getElementById('app-container').style.display = 'none';
+      document.getElementById('difficulty-screen').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
