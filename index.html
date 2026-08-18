@@ -30,7 +30,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    #difficulty-screen, #confirm-modal {
+    #difficulty-screen, #confirm-modal, #help-screen {
       position: fixed;
       top: 0;
       left: 0;
@@ -50,6 +50,13 @@
       display: none;
       z-index: 200;
       background-color: rgba(0, 0, 0, 0.85);
+    }
+
+    #help-screen {
+      display: none;
+      z-index: 150;
+      justify-content: flex-start;
+      overflow-y: auto;
     }
 
     .modal-box {
@@ -74,25 +81,65 @@
     }
 
     #difficulty-screen h2 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 800;
       color: #ffffff;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       text-align: center;
+    }
+
+    .section-title {
+      color: #9ca3af;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 12px 0 6px 0;
+      font-weight: 800;
+    }
+
+    .mode-toggle {
+      display: flex;
+      background: #2d2d2d;
+      border-radius: 10px;
+      padding: 4px;
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 12px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+
+    .mode-btn.active {
+      background-color: var(--accent-color);
+      color: #fff;
     }
 
     .diff-btn {
       width: 100%;
       max-width: 320px;
-      padding: 16px 20px;
-      margin: 8px 0;
-      font-size: 1.1rem;
+      padding: 14px 20px;
+      margin: 6px 0;
+      font-size: 1rem;
       font-weight: bold;
       border: none;
       border-radius: 12px;
-      background-color: var(--accent-color);
+      background-color: #374151;
       color: white;
       cursor: pointer;
+    }
+
+    .diff-btn:hover {
+      background-color: #4b5563;
     }
 
     #app-container {
@@ -101,6 +148,15 @@
       display: none;
       flex-direction: column;
       gap: 16px;
+    }
+
+    .app-header-title {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #f3f4f6;
+      margin-bottom: -4px;
+      line-height: 1.3;
     }
 
     .status-bar {
@@ -112,12 +168,6 @@
       border-radius: 8px;
       font-weight: bold;
       color: #f3f4f6;
-    }
-
-    .status-title {
-      color: #e5e7eb;
-      font-size: 0.95rem;
-      letter-spacing: 0.5px;
     }
 
     .round-badge {
@@ -133,13 +183,13 @@
       flex-direction: column;
       overflow: hidden;
       box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-      min-height: 460px;
+      min-height: 480px;
       position: relative;
     }
 
     .top-actions-bar {
       background-color: #2b2b2b;
-      padding: 6px 12px;
+      padding: 6px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -161,77 +211,117 @@
       gap: 6px;
     }
 
-    .standalone-crown {
-      font-size: 1.4rem;
-      line-height: 1;
+    .crown-prefix {
       display: flex;
       align-items: center;
+      color: #f59e0b;
+      font-size: 1rem;
+      font-weight: 800;
+      gap: 2px;
     }
 
-    .crown-colon {
-      color: #fff;
-      font-size: 1.4rem;
-      font-weight: bold;
-      margin-right: 4px;
+    .crown-icon-svg {
+      width: 30px;
+      height: 30px;
+      fill: #f59e0b;
     }
 
+    /* Vertical Rectangular Action Badges - iconed royal cards*/
     .action-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      color: #fff;
+      padding: 3px 2px;
+      border-radius: 6px;
+      background-color: #875808; 
+      color: #fef08a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border: 1px solid #fef08a;
+      min-width: 20px;
+      min-height: 26px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .action-svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .royal-badge {           /* numbered royal cards*/
+      background-color: #875808;
+      color: #fef08a;
+      border: 1px solid #fef08a;
+      min-width: 20px;
+      min-height: 26px;
+      border-radius: 6px;
+      padding: 3px 2px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .cf-tag-badge {
+      background-color: #8b5cf6;
+      color: #ffffff;
+      border: 1px solid #ddd6fe;
+      border-radius: 6px;
+      padding: 2px 3px;
+      font-weight: 800;
+      font-size: 0.65rem; /* Reduced CFX Tag size */
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
-      font-weight: bold;
-      border: 2px solid #ddd;
+      letter-spacing: 0.5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
-
-    .action-icon.extra-turn { background: #2563eb; }
-    .action-icon.take-gem { background: #059669; }
-    .action-icon.privilege { background: #7c3aed; }
-    .action-icon.vp { background: #5b21b6; }
-    .action-icon.royal-favor { background: #d97706; padding: 2px 6px; border-radius: 20px; font-size: 0.8rem;}
 
     .card-body {
       display: flex;
       flex: 1;
+      position: relative;
     }
 
     .gem-priority-banner {
-      width: 70px;
+      width: 64px;
       background-color: var(--banner-bg);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 8px 0 8px 0;
-      gap: 6px;
+      padding: 6px 0;
+      gap: 4px;
       position: relative;
       border-right: 2px solid #6b4d21;
     }
 
     .gem-priority-header {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 800;
       color: #fef08a;
       text-transform: uppercase;
       text-align: center;
-      line-height: 1.1;
-      letter-spacing: 0.5px;
-      padding: 0 4px 2px 4px;
+      line-height: 1.6;
+      letter-spacing: 0.5px;   
+      padding: 4px 2px 4px 2px;
     }
 
-    .gem-circle {
-      width: 40px;
-      height: 40px;
+    .gem-circle {    
+      width: 36px;    
+      height: 36px;   
       border-radius: 50%;
       border: 2px solid #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 4px;
     }
 
     .gem-blue { background-color: #0284c7; }
@@ -240,20 +330,22 @@
     .gem-green { background-color: #16a34a; }
     .gem-pearl { background-color: #f472b6; }
     .gem-red { background-color: #dc2626; }
+    .gem-glassware { background-color: #8b5cf6; border-color: #ddd6fe; }
 
-    .card-id-tag {
-      margin-top: auto;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #3b2507;
-      padding-bottom: 6px;
+    .card-id-footer {
+      position: absolute;
+      bottom: 6px;
+      right: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #8b6b43;
     }
 
     .action-sections {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 8px 12px 12px 12px;
+      padding: 8px 12px 28px 12px;
       gap: 8px;
     }
 
@@ -286,9 +378,10 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      font-size: 1.05rem;
+      font-size: 1.4rem;
       font-weight: bold;
       flex: 1;
+      line-height: 1.5;
     }
 
     .arrow-icon {
@@ -325,19 +418,79 @@
     .btn-danger {
       background-color: #dc2626;
     }
+
+    .btn-success {
+      background-color: #16a34a;
+    }
+
+    .btn-square {
+      flex: 0 0 50px;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    /* Help Screen Elements */
+    .help-header {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #374151;
+    }
+
+    .help-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .help-content {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: left;
+    }
+
+    .help-section {
+      background: #2d2d2d;
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .help-section h3 {
+      margin-top: 0;
+      color: #f59e0b;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Difficulty Selection Overlay -->
   <div id="difficulty-screen">
-    <h2>Splendor Automa</h2>
-    <button class="diff-btn" data-size="10">Easy (10 Deck Size)</button>
-    <button class="diff-btn" data-size="9">Normal (9 Deck Size)</button>
-    <button class="diff-btn" data-size="8">Hard (8 Deck Size)</button>
+    <h2>Splendor Duel Automa</h2>
+
+    <div class="section-title">Game Mode</div>
+    <div class="mode-toggle">
+      <button class="mode-btn" id="mode-base-btn">Base Game</button>
+      <button class="mode-btn active" id="mode-counterfeit-btn">Counterfeiters</button>
+    </div>
+
+    <div class="section-title">Select Difficulty</div>
+    <button class="diff-btn" data-diff="easy">Easy</button>
+    <button class="diff-btn" data-diff="normal">Normal</button>
+    <button class="diff-btn" data-diff="hard">Hard</button>
+    <br>
+    <h6>Automa designed by Mark Outten<br>Web app created by Joanna Wareluk</h6>
   </div>
 
-  <!-- In-App Confirmation Modal -->
   <div id="confirm-modal">
     <div class="modal-box">
       <h3>Start New Game?</h3>
@@ -349,15 +502,31 @@
     </div>
   </div>
 
-  <!-- Main Application Container -->
+  <div id="help-screen">
+    <div class="help-header">
+      <h2>Help & Glossary</h2>
+      <button class="btn btn-secondary" id="close-help-btn" style="flex: 0 0 auto; padding: 8px 16px;">Close</button>
+    </div>
+    <div class="help-content">
+      <div class="help-section" id="icon-glossary">
+        <h3>Icon Glossary</h3>
+        <p style="color: #9ca3af;">(Icon glossary content will go here)</p>
+      </div>
+      <div class="help-section" id="card-map">
+        <h3>Card Map</h3>
+        <p style="color: #9ca3af;">(Card map details will go here)</p>
+      </div>
+    </div>
+  </div>
+
   <div id="app-container">
+    <div class="app-header-title" id="app-header-title">Splendor Duel Automa</div>
+
     <div class="status-bar">
       <span class="round-badge">Round <span id="current-round">1</span></span>
-      <span class="status-title">Splendor Duel</span>
       <span>Cards Left: <span id="deck-count">0</span></span>
     </div>
 
-    <!-- Automa Card Layout -->
     <div class="automa-card" id="card-display">
       <div class="top-actions-bar">
         <div class="arrow-top-container" id="arrow-header">--</div>
@@ -365,17 +534,25 @@
       </div>
 
       <div class="card-body">
-        <div class="gem-priority-banner" id="gem-banner">
-          <div class="card-id-tag" id="card-number">--</div>
-        </div>
+        <div class="gem-priority-banner" id="gem-banner"></div>
 
         <div class="action-sections" id="action-sections"></div>
+        <div class="card-id-footer" id="card-number">--</div>
       </div>
     </div>
 
     <div class="controls">
       <button class="btn" id="draw-btn">Draw Card</button>
-      <button class="btn btn-secondary" id="reset-btn">New Game</button>
+      
+      <button class="btn btn-danger btn-square" id="reset-btn" aria-label="Exit Game" title="Exit / New Game">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+      </button>
+
+      <button class="btn btn-success btn-square" id="help-btn" aria-label="Help" title="Help / Glossary">?</button>
     </div>
   </div>
 
@@ -387,187 +564,44 @@
       'SE': `<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M18 20V10H6"/><polyline points="11 5 6 10 11 15"/></svg>`
     };
 
-    const automaMasterPool = [
-      {
-        id: 1,
-        code: "NW",
-        topIcons: ["vp", "take-gem", "privilege", "extra-turn"],
-        gemPriority: ["black", "green", "blue", "red", "white", "pearl"],
-        tier1: "Refills if <5, takes 1",
-        tier2: "Spends Privilege, buys C2 for 0",
-        tier3: "Buys A2 for 5"
-      },
-      {
-        id: 2,
-        code: "NE",
-        topIcons: ["privilege", "extra-turn", "vp", "take-gem"],
-        gemPriority: ["green", "black", "red", "white", "pearl", "blue"],
-        tier1: "Refills if <2, spends Privilege, takes 2",
-        tier2: "Buys C3 for 1",
-        tier3: "Reserves A3 OR buys A1 for 4"
-      },
-      {
-        id: 3,
-        code: "SW",
-        topIcons: ["privilege", "extra-turn", "vp", "take-gem"],
-        gemPriority: ["blue", "red", "white", "pearl", "black", "green"],
-        tier1: "Refills if <2, takes 1",
-        tier2: "Buys A1 for 6",
-        tier3: "Refills if <5, takes 3"
-      },
-      {
-        id: 4,
-        code: "SE",
-        topIcons: ["extra-turn", "vp", "take-gem", "privilege"],
-        gemPriority: ["red", "white", "pearl", "black", "green", "blue"],
-        tier1: "Refills if <2, takes 3",
-        tier2: "Buys B1 for 2",
-        tier3: "Buys Reserved for 4 OR buys A2 for 4"
-      },
-      {
-        id: 5,
-        code: "NW",
-        topIcons: ["vp", "extra-turn", "privilege", "take-gem"],
-        gemPriority: ["white", "pearl", "black", "green", "blue", "red"],
-        tier1: "Refills if <1, takes 2",
-        tier2: "Spends Privilege, buys B2 for 3",
-        tier3: "Reserves B4 OR buys A3 for 4"
-      },
-      {
-        id: 6,
-        code: "NE",
-        topIcons: ["take-gem", "vp", "extra-turn", "privilege"],
-        gemPriority: ["pearl", "black", "green", "blue", "red", "white"],
-        tier1: "Refills if <5, takes 3",
-        tier2: "Buys B3 for 4",
-        tier3: "Refills if <2, spends Privilege, takes 3"
-      },
-      {
-        id: 7,
-        code: "SW",
-        topIcons: ["privilege", "take-gem", "vp", "extra-turn"],
-        gemPriority: ["blue", "pearl", "black", "green", "red", "white"],
-        tier1: "Refills if <2, spends Privilege, takes 2",
-        tier2: "Reserves B4 OR buys B2 for 3",
-        tier3: "Reserves B3 OR buys B1 for 2"
-      },
-      {
-        id: 8,
-        code: "SE",
-        topIcons: ["extra-turn", "privilege", "take-gem", "vp"],
-        gemPriority: ["red", "black", "green", "blue", "white", "pearl"],
-        tier1: "Refills if <1, takes 2",
-        tier2: "Buys Reserved for 5 OR buys B3 for 3",
-        tier3: "Buys B1 for 2"
-      },
-      {
-        id: 9,
-        code: "NW",
-        topIcons: ["vp", "privilege", "take-gem", "extra-turn"],
-        gemPriority: ["white", "green", "blue", "red", "pearl", "black"],
-        tier1: "Refills if <1, takes 2",
-        tier2: "Buys Reserved for 4 OR buys B4 for 3",
-        tier3: "Spends Privilege, buys B2 for 2"
-      },
-      {
-        id: 10,
-        code: "NE",
-        topIcons: ["take-gem", "extra-turn", "privilege", "vp"],
-        gemPriority: ["pearl", "blue", "red", "white", "black", "green"],
-        tier1: "Refills if <5, spends Privilege, takes 2",
-        tier2: "Buys Reserved for 3 OR buys C4 for 2",
-        tier3: "Buys B3 for 3"
-      },
-      {
-        id: 11,
-        code: "SW",
-        topIcons: ["privilege", "vp", "extra-turn", "take-gem"],
-        gemPriority: ["black", "red", "white", "pearl", "green", "blue"],
-        tier1: "Reserves C1 OR refills if <2, takes 3",
-        tier2: "Refills if <1, takes 2",
-        tier3: "Spends Privilege, buys C4 for 1"
-      },
-      {
-        id: 12,
-        code: "SE",
-        topIcons: ["extra-turn", "take-gem", "vp", "privilege"],
-        gemPriority: ["green", "white", "pearl", "black", "blue", "red"],
-        tier1: "Reserves B1 OR refills if <2, takes 2",
-        tier2: "Refills if <2, takes 2",
-        tier3: "Spends Privilege, buys C5 for 1"
-      },
-      {
-        id: 13,
-        code: "NW",
-        topIcons: ["vp", "privilege", "extra-turn", "take-gem"],
-        gemPriority: ["pearl", "red", "green", "white", "blue", "black"],
-        tier1: "Buys B2 for 4",
-        tier2: "Refills if <3, spends Privilege, takes 2",
-        tier3: "Buys Reserved for 3 OR refills if <1, takes 2"
-      },
-      {
-        id: 14,
-        code: "NE",
-        topIcons: ["take-gem", "extra-turn", "vp", "privilege"],
-        gemPriority: ["black", "white", "blue", "pearl", "red", "green"],
-        tier1: "Buys C2 for 2",
-        tier2: "Refills if <5, takes 2",
-        tier3: "Refills if <3, spends Privilege, takes 3"
-      },
-      {
-        id: 15,
-        code: "SW",
-        topIcons: ["privilege", "vp", "take-gem", "extra-turn"],
-        gemPriority: ["green", "pearl", "red", "black", "white", "blue"],
-        tier1: "Buys C3 for 2",
-        tier2: "Refills if <4, takes 3",
-        tier3: "Buys Reserved for 3 OR refills if <2, takes 2"
-      },
-      {
-        id: 16,
-        code: "SE",
-        topIcons: ["extra-turn", "take-gem", "privilege", "vp"],
-        gemPriority: ["blue", "black", "white", "green", "pearl", "red"],
-        tier1: "Buys C4 for 3",
-        tier2: "Refills if <5, takes 3",
-        tier3: "Refills if <2, takes 2"
-      },
-      {
-        id: 17,
-        code: "NW",
-        topIcons: ["vp", "privilege", "extra-turn", "take-gem"],
-        gemPriority: ["red", "green", "pearl", "blue", "black", "white"],
-        tier1: "Buys C5 for 3",
-        tier2: "Refills if <5, takes 2",
-        tier3: "Refills if <1, takes 2"
-      },
-      {
-        id: 18,
-        code: "SE",
-        topIcons: ["take-gem", "extra-turn", "privilege", "vp"],
-        gemPriority: ["white", "blue", "black", "red", "green", "pearl"],
-        tier1: "Spends Privilege, buys C1 for 3",
-        tier2: "Refills if <5, takes 3",
-        tier3: "Spends Privilege, buys B4 for 2"
-      }
+    // Custom SVGs for updated action icons
+    const iconSVGMap = {
+      'steal': `<svg class="action-svg" viewBox="0 0 24 24"><path d="M9 11.24V7.5a2.5 2.5 0 0 1 5 0v3.74a3 3 0 0 1 2.25 2.91c0 1.22-.73 2.28-1.78 2.75L13.5 21h-3l-.97-4.1A3.001 3.001 0 0 1 6.75 14.15c0-1.3.84-2.4 2.25-2.91z"/></svg>`, // Pinching Hand SVG
+      'privilege': `<svg class="action-svg" viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6zm3 2v2h10V8H7zm0 4v2h10v-2H7zm0 4v2h7v-2H7z"/></svg>`, // Rolled-Up Newspaper SVG
+      'gold': `<svg class="action-svg" viewBox="0 0 24 24" fill="#eab308"><circle cx="12" cy="12" r="9"/></svg>` // Yellow Circle SVG
+    };
+
+    const deckBase = [
+      { id: 1, code: "NW", topIcons: ["vp", "take-gem", "privilege", "extra-turn"], gemPriority: ["black", "green", "blue", "red", "white", "pearl"], tier1: "Refills if <5, takes 1", tier2: "Spends Privilege, buys C2 for 0", tier3: "Buys A2 for 5" },
     ];
 
+    const deckCounterfeitA = [
+      { id: 1, code: "NW", topIcons: ["steal", "#1"], cfTag: "CF1", gemPriority: ["k", "g", "b", "r", "w", "p", "v"], tier1: "🎉<5&emsp;&emsp;+1", tier2: "🗞️ → 1&emsp;&emsp;0→C2", tier3: "5 → A2" },
+    ];
+
+    const deckCounterfeitB = [
+      { id: 19, code: "NE", topIcons: ["#3", "#2"], cfTag: "CF3", gemPriority: ["r", "w", "p", "v", "k", "g", "b"], tier1: "3 → CF1", tier2: "draw another card", tier3: "draw another card" },
+    ];
+
+    let selectedGameMode = 'counterfeits'; // 'base' or 'counterfeits'
     let activeCampaignDeck = [];
     let drawPile = [];
     let currentRound = 1;
-    let selectedDeckSize = 10;
+    let selectedDifficulty = 'normal';
     let activeCard = null;
     const MAX_ROUNDS = 6;
 
     window.addEventListener("DOMContentLoaded", function() {
+      setupModeButtons();
+
       if (!autoResumeGame()) {
         document.getElementById('difficulty-screen').style.display = 'flex';
       }
 
       document.querySelectorAll('.diff-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
-          var size = parseInt(this.getAttribute('data-size'), 10);
-          startGame(size);
+          var diff = this.getAttribute('data-diff');
+          startGame(selectedGameMode, diff);
         });
       });
 
@@ -575,17 +609,48 @@
       document.getElementById('reset-btn').addEventListener('click', showResetModal);
       document.getElementById('cancel-reset-btn').addEventListener('click', hideResetModal);
       document.getElementById('confirm-reset-btn').addEventListener('click', executeReset);
+
+      // Help Screen Handlers
+      document.getElementById('help-btn').addEventListener('click', showHelpScreen);
+      document.getElementById('close-help-btn').addEventListener('click', hideHelpScreen);
     });
+
+    function setupModeButtons() {
+      const baseBtn = document.getElementById('mode-base-btn');
+      const cfBtn = document.getElementById('mode-counterfeit-btn');
+
+      baseBtn.addEventListener('click', function() {
+        selectedGameMode = 'base';
+        baseBtn.classList.add('active');
+        cfBtn.classList.remove('active');
+      });
+
+      cfBtn.addEventListener('click', function() {
+        selectedGameMode = 'counterfeits';
+        cfBtn.classList.add('active');
+        baseBtn.classList.remove('active');
+      });
+    }
 
     function saveGameState() {
       const state = {
+        selectedGameMode,
         activeCampaignDeck,
         drawPile,
         currentRound,
-        selectedDeckSize,
+        selectedDifficulty,
         activeCard
       };
       localStorage.setItem('splendor_automa_save', JSON.stringify(state));
+    }
+
+    function updateHeaderTitle() {
+      const titleElem = document.getElementById('app-header-title');
+      if (selectedGameMode === 'counterfeits') {
+        titleElem.innerText = "Splendor Duel + Counterfeiters Automa";
+      } else {
+        titleElem.innerText = "Splendor Duel Automa";
+      }
     }
 
     function autoResumeGame() {
@@ -594,14 +659,17 @@
 
       try {
         const state = JSON.parse(saved);
+        selectedGameMode = state.selectedGameMode || 'counterfeits';
         activeCampaignDeck = state.activeCampaignDeck;
         drawPile = state.drawPile;
         currentRound = state.currentRound;
-        selectedDeckSize = state.selectedDeckSize;
+        selectedDifficulty = state.selectedDifficulty;
         activeCard = state.activeCard;
 
         document.getElementById('difficulty-screen').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
+        
+        updateHeaderTitle();
         document.getElementById('current-round').innerText = currentRound;
         document.getElementById('deck-count').innerText = drawPile.length;
 
@@ -623,13 +691,32 @@
       }
     }
 
-    function startGame(size) {
-      selectedDeckSize = size;
+    function startGame(mode, diff) {
+      selectedGameMode = mode;
+      selectedDifficulty = diff;
+
       document.getElementById('difficulty-screen').style.display = 'none';
       document.getElementById('app-container').style.display = 'flex';
       
-      var shuffled = [...automaMasterPool].sort(function() { return Math.random() - 0.5; });
-      activeCampaignDeck = shuffled.slice(0, selectedDeckSize);
+      updateHeaderTitle();
+
+      let combinedPool = [];
+
+      if (mode === 'base') {
+        const baseCounts = { easy: 10, normal: 9, hard: 8 };
+        const count = baseCounts[diff];
+        combinedPool = [...deckBase].sort(() => Math.random() - 0.5).slice(0, count);
+      } else {
+        const expCounts = { easy: 12, normal: 10, hard: 8 };
+        const countA = expCounts[diff];
+
+        const selectedA = [...deckCounterfeitA].sort(() => Math.random() - 0.5).slice(0, countA);
+        const selectedB = [...deckCounterfeitB].sort(() => Math.random() - 0.5).slice(0, 3);
+
+        combinedPool = [...selectedA, ...selectedB].sort(() => Math.random() - 0.5);
+      }
+
+      activeCampaignDeck = combinedPool;
       activeCard = null;
       
       startRound(1);
@@ -640,7 +727,7 @@
       activeCard = null;
       document.getElementById('current-round').innerText = currentRound;
       
-      drawPile = [...activeCampaignDeck].sort(function() { return Math.random() - 0.5; });
+      drawPile = [...activeCampaignDeck].sort(() => Math.random() - 0.5);
       document.getElementById('deck-count').innerText = drawPile.length;
       document.getElementById('draw-btn').innerText = "Draw Card";
       
@@ -651,7 +738,8 @@
     function renderRoundStartPrompt() {
       document.getElementById('arrow-header').innerHTML = '--';
       document.getElementById('top-icons').innerHTML = '';
-      document.getElementById('gem-banner').innerHTML = '<div class="card-id-tag" id="card-number">--</div>';
+      document.getElementById('gem-banner').innerHTML = '';
+      document.getElementById('card-number').innerText = '--';
       document.getElementById('action-sections').innerHTML = 
         '<div style="text-align:center; padding:40px 10px; color:#4a3b2c; font-weight:bold;">' +
           'Round ' + currentRound + ' Ready!<br><br>Tap "Draw Card" to reveal card.' +
@@ -689,27 +777,41 @@
       var topContainer = document.getElementById('top-icons');
       topContainer.innerHTML = '';
 
-      var crownSpan = document.createElement('span');
-      crownSpan.className = 'standalone-crown';
-      crownSpan.innerText = '👑';
-      topContainer.appendChild(crownSpan);
-
-      var colonSpan = document.createElement('span');
-      colonSpan.className = 'crown-colon';
-      colonSpan.innerText = ':';
-      topContainer.appendChild(colonSpan);
+      var crownDiv = document.createElement('div');
+      crownDiv.className = 'crown-prefix';
+      crownDiv.innerHTML = `<svg class="crown-icon-svg" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>:`;
+      topContainer.appendChild(crownDiv);
 
       card.topIcons.forEach(function(iconType) {
         if (iconType === 'crown') return;
-        var iconDiv = document.createElement('div');
-        iconDiv.className = 'action-icon ' + iconType;
-        if (iconType === 'extra-turn') iconDiv.innerText = '🔄';
-        else if (iconType === 'take-gem') iconDiv.innerText = '🤏';
-        else if (iconType === 'privilege') iconDiv.innerText = '📜';
-        else if (iconType === 'vp') iconDiv.innerText = 'VP';
-        else if (iconType === 'royal-favor') { iconDiv.innerText = 'Favor'; iconDiv.className += ' royal-favor'; }
-        topContainer.appendChild(iconDiv);
+
+        if (iconType.startsWith('#') || iconType.startsWith('R')) {
+          var royalLabel = iconType.replace('R', '#');
+          var royalDiv = document.createElement('div');
+          royalDiv.className = 'royal-badge';
+          royalDiv.innerText = royalLabel;
+          topContainer.appendChild(royalDiv);
+        } else {
+          var iconDiv = document.createElement('div');
+          iconDiv.className = 'action-icon ' + iconType;
+          
+          if (iconType === 'extra-turn' || iconType === 'repeat') iconDiv.innerText = '🔄';
+          else if (iconType === 'take-gem' || iconType === 'steal') iconDiv.innerText = '🤏';
+          else if (iconType === 'vp') iconDiv.innerText = 'VP';
+          else if (iconType === 'gold') iconDiv.innerText = '🟡';  
+          else if (iconSVGMap[iconType]) iconDiv.innerHTML = iconSVGMap[iconType];
+          else iconDiv.innerText = iconType;
+
+          topContainer.appendChild(iconDiv);
+        }
       });
+
+      if (card.cfTag) {
+        var cfDiv = document.createElement('div');
+        cfDiv.className = 'cf-tag-badge';
+        cfDiv.innerText = '' + card.cfTag + '';
+        topContainer.appendChild(cfDiv);
+      }
 
       var banner = document.getElementById('gem-banner');
       var gemMap = {
@@ -718,15 +820,24 @@
         white: '<div class="gem-circle gem-white">⚪</div>',
         green: '<div class="gem-circle gem-green">🟢</div>',
         pearl: '<div class="gem-circle gem-pearl">🌸</div>',
-        red: '<div class="gem-circle gem-red">🔴</div>'
+        red: '<div class="gem-circle gem-red">🔴</div>',
+        glassware: '<div class="gem-circle gem-glassware">💎</div>',
+        b: '<div class="gem-circle gem-blue">🔵</div>',
+        k: '<div class="gem-circle gem-black">⚫</div>',
+        w: '<div class="gem-circle gem-white">⚪</div>',
+        g: '<div class="gem-circle gem-green">🟢</div>',
+        p: '<div class="gem-circle gem-pearl">🌸</div>',
+        r: '<div class="gem-circle gem-red">🔴</div>',
+        v: '<div class="gem-circle gem-glassware">💎</div>'
       };
 
       var gemsHTML = '<div class="gem-priority-header">GEM<br>PRIORITY:</div>';
       card.gemPriority.forEach(function(gemKey) {
-        gemsHTML += gemMap[gemKey];
+        gemsHTML += gemMap[gemKey] || '';
       });
-      gemsHTML += '<div class="card-id-tag" id="card-number">#' + card.id + '</div>';
       banner.innerHTML = gemsHTML;
+
+      document.getElementById('card-number').innerText = card.id;
 
       var actionContainer = document.getElementById('action-sections');
       actionContainer.innerHTML = 
@@ -762,6 +873,14 @@
       hideResetModal();
       document.getElementById('app-container').style.display = 'none';
       document.getElementById('difficulty-screen').style.display = 'flex';
+    }
+
+    function showHelpScreen() {
+      document.getElementById('help-screen').style.display = 'flex';
+    }
+
+    function hideHelpScreen() {
+      document.getElementById('help-screen').style.display = 'none';
     }
   </script>
 </body>
