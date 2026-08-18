@@ -470,6 +470,63 @@
       margin-top: 0;
       color: #f59e0b;
     }
+
+    /* Card Map Styling */
+  .card-map-grid {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    overflow-x: auto;
+    padding: 8px 4px;
+  }
+
+  .map-col, .map-row {
+    display: flex;
+    gap: 6px;
+  }
+
+  .purple-col {
+    flex-direction: column;
+  }
+
+  .map-main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .map-card {
+    width: 42px;
+    height: 56px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  /* Color Variations */
+  .map-card.purple {
+    background-color: #8b5cf6;
+    border-color: #c4b5fd;
+  }
+
+  .map-card.grey {
+    background-color: #4b5563;
+    border-color: #9ca3af;
+  }
+
+  .map-card.amber {
+    background-color: #d97706;
+    border-color: #fcd34d;
+    color: #ffffff;
+  }
   </style>
 </head>
 <body>
@@ -512,10 +569,59 @@
         <h3>Icon Glossary</h3>
         <p style="color: #9ca3af;">(Icon glossary content will go here)</p>
       </div>
-      <div class="help-section" id="card-map">
-        <h3>Card Map</h3>
-        <p style="color: #9ca3af;">(Card map details will go here)</p>
+      <!-- Replace the existing #card-map div in #help-screen with this snippet -->
+<div class="help-section" id="card-map">
+  <h3>Card Map</h3>
+  <div class="card-map-grid">
+    <!-- Left Column: Purple Deck & Counterfeiter Cards -->
+    <div class="map-col purple-col">
+      <div class="map-card purple">DECK</div>
+      <div class="map-card purple">CF1</div>
+      <div class="map-card purple">CF2</div>
+      <div class="map-card purple">CF3</div>
+    </div>
+
+    <!-- Right Side Layout Grid (4 Rows) -->
+    <div class="map-main-grid">
+      <!-- Row A (Level 3 - Grey/Blue) -->
+      <div class="map-row">
+        <div class="map-card grey">DECK</div>
+        <div class="map-card grey">A1</div>
+        <div class="map-card grey">A2</div>
+        <div class="map-card grey">A3</div>
       </div>
+
+      <!-- Row B (Level 2 - Grey/Gold) -->
+      <div class="map-row">
+        <div class="map-card grey">DECK</div>
+        <div class="map-card grey">B1</div>
+        <div class="map-card grey">B2</div>
+        <div class="map-card grey">B3</div>
+        <div class="map-card grey">B4</div>
+      </div>
+
+      <!-- Row C (Level 1 - Grey/Green) -->
+      <div class="map-row">
+        <div class="map-card grey">DECK</div>
+        <div class="map-card grey">C1</div>
+        <div class="map-card grey">C2</div>
+        <div class="map-card grey">C3</div>
+        <div class="map-card grey">C4</div>
+        <div class="map-card grey">C5</div>
+      </div>
+
+      <!-- Bottom Row (Royal Cards - Amber) -->
+      <div class="map-row">
+        <div class="map-card amber">DECK</div>
+        <div class="map-card amber">1</div>
+        <div class="map-card amber">2</div>
+        <div class="map-card amber">3</div>
+        <div class="map-card amber">4</div>
+      </div>
+    </div>
+  </div>
+</div>
+      
     </div>
   </div>
 
